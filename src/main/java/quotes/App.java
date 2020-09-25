@@ -5,8 +5,9 @@ package quotes;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -14,12 +15,41 @@ public class App {
 
 
     public static void main(String[] args) throws IOException {
-        Gson gson = new Gson();
-        RecentQuotes quotes = new RecentQuotes("Charles Dickens", "Hello?");
-        System.out.println(quotes);
-        Reader quoteReader = Files.newBufferedReader(Paths.get("src/main/resources/recentQuotes.json"));
-        RecentQuotes[] numQuotes = gson.fromJson(quoteReader, RecentQuotes[].class);
-        System.out.println(quotes.stringify(getRandomNumber(0, 138), numQuotes));
+        try {
+            //Ron Swanson Quotes: https://ron-swanson-quotes.herokuapp.com/v2/quotes
+            URL url = new URL("http://swquotesapi.digitaljedi.dk/api/SWQuote/RandomStarWarsQuote");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String oneLine = input.readLine();
+            StringBuffer entireStringResponse = new StringBuffer();
+            while (oneLine != null) {
+                entireStringResponse.append(oneLine);
+                oneLine = input.readLine();
+            }
+            input.close();
+            System.out.println(entireStringResponse);
+            String starQuote = String.valueOf(entireStringResponse);
+
+            Gson gUnit = new Gson();
+            StarWarsQuotes vader = gUnit.fromJson(starQuote, StarWarsQuotes.class);
+
+            File internetQuote = new File("src/main/resources/internetQuote.json");
+            internetQuote.createNewFile();
+            FileWriter dataFileWriter = new FileWriter("src/main/resources/internetQuote.json");
+            gUnit.toJson(vader, dataFileWriter);
+            dataFileWriter.close();
+
+        }
+        catch(Exception e) {
+            Gson gson = new Gson();
+            RecentQuotes quotes = new RecentQuotes("Charles Dickens", "Hello?");
+            Reader quoteReader = Files.newBufferedReader(Paths.get("src/main/resources/recentQuotes.json"));
+            RecentQuotes[] numQuotes = gson.fromJson(quoteReader, RecentQuotes[].class);
+            System.out.println(quotes.stringify(getRandomNumber(0, 138), numQuotes));
+        }
+
     }
 
     public static int getRandomNumber(int min, int max) {
