@@ -25,7 +25,7 @@ public class App {
         Reader quoteReader = Files.newBufferedReader(Paths.get("src/main/resources/recentQuotes.json"));
         RecentQuotes[] numQuotes = gson.fromJson(quoteReader, RecentQuotes[].class);
         System.out.println(quotes.stringify(getRandomNumber(0, 138), numQuotes));
-//        addQuoteToFile(quotes);
+        addQuoteToFile(quotes);
     }
 
     public static int getRandomNumber(int min, int max) {
