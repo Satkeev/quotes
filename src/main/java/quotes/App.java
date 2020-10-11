@@ -7,7 +7,6 @@ package quotes;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import java.io.*;
 import java.lang.reflect.Type;
@@ -77,22 +76,6 @@ public class App {
 
         } catch(Exception e) {
             // Ignore
-        }
-    }
-
-    private static class Quote extends JsonElement {
-        private Object String;
-
-        public Quote(String ron_swanson, String substring) {
-        }
-
-        public String getText() {
-            return null ;
-        }
-
-        @Override
-        public JsonElement deepCopy() {
-            return null;
         }
     }
 }

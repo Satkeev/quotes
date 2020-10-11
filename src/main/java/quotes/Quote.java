@@ -3,7 +3,7 @@ package quotes;
 import java.util.ArrayList;
 import java.util.List;
 
-class quote {
+public class Quote {
     private String author;
     private String text;
 
@@ -16,7 +16,7 @@ class quote {
         return this.text;
     }
 
-    public quote(String author, String text) {
+    public Quote(String author, String text) {
         this.author = author;
         this.text = text;
     }
